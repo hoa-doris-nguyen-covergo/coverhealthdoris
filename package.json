@@ -1,0 +1,26 @@
+{
+  "name": "automate-ch",
+  "version": "1.0.0",
+  "description": "Playwright E2E automation for CoverHealth Admin Portal – Proposals V2",
+  "scripts": {
+    "test": "playwright test",
+    "test:proposal": "playwright test --project=proposal",
+    "test:offer": "playwright test --project=offer",
+    "test:list": "playwright test tests/proposal/01-list-search-filter.spec.ts",
+    "test:create": "playwright test tests/proposal/02-create-proposal.spec.ts",
+    "test:offer-mgmt": "playwright test tests/offer/03-offer-management.spec.ts",
+    "test:offer-detail": "playwright test tests/offer/04-offer-detail.spec.ts",
+    "test:member": "playwright test tests/offer/05-member.spec.ts",
+    "test:lifecycle": "playwright test tests/offer/06-lifecycle.spec.ts",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "setup": "playwright test tests/auth.setup.ts --project=setup"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0"
+  }
+}
