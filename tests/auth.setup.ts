@@ -1,10 +1,19 @@
 import { test as setup, expect } from '@playwright/test';
+import { LoginPage } from '../pages/login/LoginPage';
+
+const EMAIL    = 'hoa.nguyen@covergo.com';
+const PASSWORD = 'FBU0naw@fuv0xmg_kme';
 
 setup('authenticate', async ({ page }) => {
-  await page.goto('/login');
-  await page.getByLabel(/email/i).fill('hoa.nguyen@covergo.com');
-  await page.getByLabel(/password/i).fill('FBU0naw@fuv0xmg_kme');
-  await page.getByRole('button', { name: /log in|sign in/i }).click();
-  await expect(page).toHaveURL(/dashboard/);
+  const loginPage = new LoginPage(page);
+
+  await loginPage.goto();
+  await loginPage.loginAndWaitForDashboard(EMAIL, PASSWORD);
+
+  // Verify we actually landed on the app (not an error or back on /login)
+  await expect(page).not.toHaveURL(/login/, { timeout: 30_000 });
+  await expect(page.locator('body')).not.toContainText(/invalid.*credentials|incorrect.*password|login.*failed/i);
+
+  // Save the authenticated session for all other tests
   await page.context().storageState({ path: 'auth.json' });
 });

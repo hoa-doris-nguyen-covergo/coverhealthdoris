@@ -61,7 +61,7 @@ export class ProposalListPage {
   }
 
   async clickFirstRow() {
-    await this.page.locator('table tbody tr').first().click();
+    await this.page.locator('table tbody tr:not(.ant-table-measure-row)').first().click();
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -129,7 +129,7 @@ export class ProposalListPage {
    * Useful for verifying the agent column updated after reassignment.
    */
   async getAgentForProposal(proposalNumber: string): Promise<string> {
-    const row = this.page.locator('table tbody tr').filter({ hasText: proposalNumber });
+    const row = this.page.locator('table tbody tr:not(.ant-table-measure-row)').filter({ hasText: proposalNumber });
     await expect(row).toBeVisible({ timeout: 8_000 });
     // Agent is the 3rd column (index 2)
     return (await row.locator('td').nth(2).textContent()) ?? '';

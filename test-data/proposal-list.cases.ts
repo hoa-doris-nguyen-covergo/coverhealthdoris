@@ -35,6 +35,7 @@ export const SEARCH_CASES = [
     description: 'Special characters do not crash the page',
     query: '!@#$%^',
     expectResults: false,
+    noErrorOnly: true,  // app may return results or empty — just assert no crash
   },
   {
     id: 'S-06',
@@ -120,6 +121,97 @@ export const DATE_FILTER_CASES = [
     dateFrom: '2099-12-31',
     dateTo: null,
     expectEmpty: true,
+  },
+];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DISTRIBUTOR & AGENTS FILTER CASES
+// UI flow:
+//   1. Click "Distributors & Agents" button → panel opens
+//   2. Left side: Distributor search box + checkbox list
+//   3. Type distributor name → matching items appear → tick checkbox to select
+//   4. Right side: Agent panel appears for selected distributor
+//      - Search box for agents
+//      - 4 tabs: All | Primary (default) | Secondary | Servicing
+//   5. Select ≥1 agent from any tab → Apply button becomes enabled
+//   6. Click Apply → list filters; Clear resets
+// ─────────────────────────────────────────────────────────────────────────────
+export const DISTRIBUTOR_SEARCH_TERM = 'Doris';
+export const DISTRIBUTOR_NAME        = 'Doris Nguyen';  // exact match in checkbox list
+export const AGENT_SEARCH_TERM       = '';              // leave blank to use default tab
+export type AgentTab = 'All' | 'Primary' | 'Secondary' | 'Servicing';
+
+export const DA_CASES = [
+  {
+    id: 'DA-01',
+    description: 'Opening the panel shows distributor list and "Select distributors first" hint',
+  },
+  {
+    id: 'DA-02',
+    description: 'Searching a distributor name narrows the distributor list',
+    distributorSearch: DISTRIBUTOR_SEARCH_TERM,
+  },
+  {
+    id: 'DA-03',
+    description: 'Selecting a distributor hides the hint and shows the agent panel',
+    distributorSearch: DISTRIBUTOR_SEARCH_TERM,
+    distributorName:   DISTRIBUTOR_NAME,
+  },
+  {
+    id: 'DA-04',
+    description: 'Agent panel defaults to Primary tab and lists agents',
+    distributorSearch: DISTRIBUTOR_SEARCH_TERM,
+    distributorName:   DISTRIBUTOR_NAME,
+    expectAgentTab:    'Primary' as AgentTab,
+  },
+  {
+    id: 'DA-05',
+    description: 'Switching to All tab shows agents and selecting one enables Apply',
+    distributorSearch: DISTRIBUTOR_SEARCH_TERM,
+    distributorName:   DISTRIBUTOR_NAME,
+    agentTab:          'All' as AgentTab,
+    selectFirstAgent:  true,
+  },
+  {
+    id: 'DA-06',
+    description: 'Switching to Secondary tab is accessible',
+    distributorSearch: DISTRIBUTOR_SEARCH_TERM,
+    distributorName:   DISTRIBUTOR_NAME,
+    agentTab:          'Secondary' as AgentTab,
+  },
+  {
+    id: 'DA-07',
+    description: 'Switching to Servicing tab is accessible',
+    distributorSearch: DISTRIBUTOR_SEARCH_TERM,
+    distributorName:   DISTRIBUTOR_NAME,
+    agentTab:          'Servicing' as AgentTab,
+  },
+  {
+    id: 'DA-08',
+    description: 'Selecting an agent from Primary tab enables Apply and filters results',
+    distributorSearch: DISTRIBUTOR_SEARCH_TERM,
+    distributorName:   DISTRIBUTOR_NAME,
+    agentTab:          'Primary' as AgentTab,
+    selectFirstAgent:  true,
+    applyFilter:       true,
+  },
+  {
+    id: 'DA-09',
+    description: 'Searching agents by keyword narrows the agent list',
+    distributorSearch: DISTRIBUTOR_SEARCH_TERM,
+    distributorName:   DISTRIBUTOR_NAME,
+    agentTab:          'All' as AgentTab,
+    agentSearch:       'Agent',
+  },
+  {
+    id: 'DA-10',
+    description: 'Clear button resets distributor & agent selections and restores full list',
+    distributorSearch: DISTRIBUTOR_SEARCH_TERM,
+    distributorName:   DISTRIBUTOR_NAME,
+    agentTab:          'Primary' as AgentTab,
+    selectFirstAgent:  true,
+    applyFilter:       true,
+    clearAfter:        true,
   },
 ];
 
